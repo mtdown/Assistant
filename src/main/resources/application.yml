@@ -1,0 +1,16 @@
+#langchain4j:
+#  open-ai:
+#    chat-model:
+#      base-url: http://localhost:11434/v1
+#      api-key: "N/A"
+#      model-name: qwen3:8b
+#      log-requests: true
+#      log-responses: true
+langchain4j:
+  open-ai:
+    streaming-chat-model: #流式模型配置
+      base-url: http://localhost:11434/v1
+      api-key: "N/A"
+      model-name: qwen3:8b
+      log-requests: true
+      log-responses: true
