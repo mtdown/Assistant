@@ -24,6 +24,12 @@ import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import dev.langchain4j.tools.WebSearchTool;
+import dev.langchain4j.web.search.WebSearchEngine;
+import dev.langchain4j.web.search.tavily.TavilyWebSearchEngine;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
@@ -65,28 +71,38 @@ public class CommonConfig {
         };
         return chatMemoryProvider;
     }
+
+//    @Bean
+////    构建向量数据库操作对象
+//    public EmbeddingStore Store() {
+//        //1加载文件进内存
+////        List<Document> content = ClassPathDocumentLoader.loadDocuments("content");//文档分割器使用位置
+////        List<Document> content = FileSystemDocumentLoader.loadDocuments("C:\\Users\\origin\\IdeaProjects\\consultant\\src\\main\\resources\\pdfcontent",new ApachePdfBoxDocumentParser());
+//          List<Document> content = FileSystemDocumentLoader.loadDocuments("C:\\blog\\source\\_posts");
+//        //2构建向量数据库操作对象
+////        InMemoryEmbeddingStore embeddingStore = new InMemoryEmbeddingStore();
+//
+//        //3.追加一个文档分割器，以方便将长文本进行切分
+//        DocumentSplitter recursive = DocumentSplitters.recursive(500,100);
+//        //切割文档存到向量数据库,构建embeddingstore对象
+//        EmbeddingStoreIngestor embeddingStoreIngestor=EmbeddingStoreIngestor.builder()
+//                .embeddingStore(redisEmbeddingStore)//分词用
+//                .embeddingModel(embeddingModel)
+//                .documentSplitter(recursive)//分割文档用
+//                .build();
+//        embeddingStoreIngestor.ingest(content);
+//
+////        return embeddingStore;
+//        return redisEmbeddingStore;
+//    }
+
     @Bean
-//    构建向量数据库操作对象
+    // 构建向量数据库操作对象
     public EmbeddingStore Store() {
-        //1加载文件进内存
-//        List<Document> content = ClassPathDocumentLoader.loadDocuments("content");//文档分割器使用位置
-        List<Document> content = FileSystemDocumentLoader.loadDocuments("C:\\Users\\origin\\IdeaProjects\\consultant\\src\\main\\resources\\pdfcontent",new ApachePdfBoxDocumentParser());
-        //2构建向量数据库操作对象
-//        InMemoryEmbeddingStore embeddingStore = new InMemoryEmbeddingStore();
-
-        //3.追加一个文档分割器，以方便将长文本进行切分
-        DocumentSplitter recursive = DocumentSplitters.recursive(500,100);
-        //切割文档存到向量数据库,构建embeddingstore对象
-        EmbeddingStoreIngestor embeddingStoreIngestor=EmbeddingStoreIngestor.builder()
-                .embeddingStore(redisEmbeddingStore)//分词用
-                .embeddingModel(embeddingModel)
-                .documentSplitter(recursive)//分割文档用
-                .build();
-        embeddingStoreIngestor.ingest(content);
-
-//        return embeddingStore;
+        // 数据加载和注入的逻辑全部移除,只负责将已经存在的 redisEmbeddingStore 实例提供给需要它的其他 Bean
         return redisEmbeddingStore;
     }
+
     @Bean
     //构建向量数据检索对象
     public ContentRetriever contentRetriever() {//有意思，这里EmbeddingStore Store如果使用了默认的embeddingStore 会导致无法读取文件内容
@@ -96,6 +112,19 @@ public class CommonConfig {
                 .minScore(0.5)
                 .maxResults(3)
                 .build();
+    }
+
+    @Bean
+    //使用API搜索文档
+    public WebSearchEngine webSearchEngine(@Value("${langchain4j.web-search-engine.tavily.api-key}") String apiKey) {
+        return TavilyWebSearchEngine.builder()
+                .apiKey(apiKey)
+                .build();
+    }
+
+    @Bean
+    public WebSearchTool webSearchTool(WebSearchEngine webSearchEngine) {
+        return new WebSearchTool(webSearchEngine);
     }
 }
 
