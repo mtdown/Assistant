@@ -24,12 +24,13 @@ import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import dev.langchain4j.tools.WebSearchTool;
+import dev.langchain4j.web.search.WebSearchTool;
 import dev.langchain4j.web.search.WebSearchEngine;
 import dev.langchain4j.web.search.tavily.TavilyWebSearchEngine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 
 import java.util.List;
 
@@ -121,7 +122,6 @@ public class CommonConfig {
                 .apiKey(apiKey)
                 .build();
     }
-
     @Bean
     public WebSearchTool webSearchTool(WebSearchEngine webSearchEngine) {
         return new WebSearchTool(webSearchEngine);

@@ -16,7 +16,8 @@ import reactor.core.publisher.Flux;
 //        ,chatMemory = "chatMemory"//配置会话记忆
         ,chatMemoryProvider = "chatMemoryProvider"//配置会话记忆
         ,contentRetriever = "contentRetriever"//配置向量数据库检索对象
-        ,tools = "reservationTool"
+//        ,tools = "reservationTool"
+        ,tools = {"reservationTool", "webSearchTool"}
 )
 //@AiService
 public interface ConsultantService {

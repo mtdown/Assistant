@@ -6,8 +6,8 @@ langchain4j:
        #流式模型配置
       base-url: http://localhost:11434/v1
       api-key: "N/A"
-      model-name: qwen3:8b
-#      model-name: qwen3:14b-q4_K_M 负担太大
+#      model-name: qwen3:8b
+      model-name: qwen3:14b-q4_K_M #负担太大
       log-requests: true
       log-responses: true
 #      system-message: "你是一个AI助手。请不要在回答中显示思考过程，直接提供最终答案。不要使用<think>标签或显示内部推理过程。"
