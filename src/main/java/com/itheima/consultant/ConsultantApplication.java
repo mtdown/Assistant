@@ -7,8 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ConsultantApplication {
 
     public static void main(String[] args) {
-
+//run方法会创建一个spring容器
         SpringApplication.run(ConsultantApplication.class, args);
     }
 
 }
+

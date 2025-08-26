@@ -52,6 +52,7 @@ public class CommonConfig {
 //                .build();
 //        return  memory;
 //    }
+//    这些类的出现是因为我再POM,XML配置了对应的包，. @SpringBootApplication 开始工作，会自动根据我的需求创造出这样的对象
     @Autowired
     private ChatMemoryStore chatMemoryStore;
     @Autowired
@@ -122,6 +123,7 @@ public class CommonConfig {
                 .apiKey(apiKey)
                 .build();
     }
+
     @Bean
     public WebSearchTool webSearchTool(WebSearchEngine webSearchEngine) {
         return new WebSearchTool(webSearchEngine);

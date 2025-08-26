@@ -15,7 +15,7 @@ public class ReservationServiceTest {
     //测试添加
     @Test
     void testInsert(){
-        Reservation reservation = new Reservation(23, "小明", "男", "1255", LocalDateTime.now(), "ca", 233);
+        Reservation reservation = new Reservation(null, "小明", "男", "1255", LocalDateTime.now(), "ca", 233);
         reservationService.insert(reservation);
     }
     @Test
