@@ -105,6 +105,11 @@
             <artifactId>langchain4j-web-search-engine-searchapi</artifactId>
             <version>1.0.0-beta3</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>

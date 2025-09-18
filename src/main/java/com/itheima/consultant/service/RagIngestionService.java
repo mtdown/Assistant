@@ -2,6 +2,7 @@ package com.itheima.consultant.service;
 
 import com.itheima.consultant.dto.CodeChunk;
 import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
@@ -28,7 +29,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
 @Service
 public class RagIngestionService {
 
@@ -100,9 +100,10 @@ public class RagIngestionService {
         List<TextSegment> segments = splitter.split(Document.from(content));
         List<CodeChunk> codeChunks = new ArrayList<>();
         for (TextSegment segment : segments) {
-            Map<String, Object> metadata = new HashMap<>();
-            metadata.put("source", filePath);
-            metadata.put("sessionId", sessionId);
+            Map<String, Object> metadataMap = new HashMap<>();
+            metadataMap.put("source", filePath);
+            metadataMap.put("sessionId", sessionId);
+            Metadata metadata = new Metadata(metadataMap);
             codeChunks.add(new CodeChunk(segment.text(), metadata));
         }
         logger.info("为文件 '{}' 创建了 {} 个代码块", filePath, codeChunks.size());
