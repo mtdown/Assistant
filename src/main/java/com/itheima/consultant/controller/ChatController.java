@@ -34,6 +34,7 @@
 package com.itheima.consultant.controller;
 
 import com.itheima.consultant.aiservice.ConsultantService;
+import com.itheima.consultant.service.RagIngestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,6 +52,10 @@ public class ChatController {
 
     @Autowired
     private ConsultantService consultantService;
+
+    //导入文件rag类
+    @Autowired
+    private RagIngestionService ragIngestionService;
 
     /**
      * 统一的/chat接口，能同时处理流式和非流式请求
