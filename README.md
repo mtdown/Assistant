@@ -70,6 +70,7 @@ spring.data.redis.port=6379
 # RAG Data Ingestion Runner (Optional)
 # 启动时是否执行一次性的知识库数据注入
 rag.ingestion.enabled=true
+```
 
 ## 🗺️ 项目路线图 (Roadmap)
 本项目正在积极开发中，后续计划实现以下功能：
