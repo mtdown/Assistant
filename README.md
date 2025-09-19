@@ -1,11 +1,5 @@
 # 我的AI顾问项目 (AI Consultant Project)
 
-<p align="center">
-  <img src="[https://img.shields.io/badge/Java-17-blue.svg](https://img.shields.io/badge/Java-17-blue.svg)" alt="Java">
-  <img src="[https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)" alt="Spring Boot">
-  <img src="[https://img.shields.io/badge/Langchain4j-0.29.1-orange.svg](https://img.shields.io/badge/Langchain4j-0.29.1-orange.svg)" alt="Langchain4j">
-  <img src="[https://img.shields.io/badge/license-MIT-lightgrey.svg](https://img.shields.io/badge/license-MIT-lightgrey.svg)" alt="License">
-</p>
 
 这是一个基于 **Langchain4j** 和 **Spring Boot** 构建的、具备高级RAG（检索增强生成）能力的智能AI顾问。
 
