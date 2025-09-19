@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +29,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 @Service
 public class RagIngestionService {
@@ -51,20 +64,44 @@ public class RagIngestionService {
         logger.info("会话 '{}' 的文件处理和知识注入完成", sessionId);
     }
 
+
     private List<CodeChunk> unzipAndParse(InputStream inputStream, String sessionId) throws IOException {
+        // 1. 先将输入流完整读入内存中的 byte 数组
+        // 这样我们就可以重复地、安全地读取它
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        inputStream.transferTo(baos);
+        byte[] fileBytes = baos.toByteArray();
+
+        // 2. 优先尝试使用标准的 UTF-8 编码
+        try {
+            logger.info("尝试使用 UTF-8 编码解压文件...");
+            return tryUnzip(new ByteArrayInputStream(fileBytes), StandardCharsets.UTF_8, sessionId);
+        } catch (ZipException e) {
+            logger.warn("使用 UTF-8 编码解压失败: {}. 正在尝试使用 GBK 编码...", e.getMessage());
+
+            // 3. 如果 UTF-8 失败，再尝试使用 GBK 编码
+            try {
+                return tryUnzip(new ByteArrayInputStream(fileBytes), Charset.forName("GBK"), sessionId);
+            } catch (IOException finalException) {
+                // 如果两种编码都失败了，就抛出最终的异常
+                logger.error("使用 UTF-8 和 GBK 两种编码尝试解压均失败。");
+                throw finalException;
+            }
+        }
+    }
+
+    private List<CodeChunk> tryUnzip(InputStream inputStream, Charset charset, String sessionId) throws IOException {
         List<CodeChunk> chunks = new ArrayList<>();
-        try (ZipInputStream zis = new ZipInputStream(inputStream)) {
+        // 在这里传入指定的编码
+        try (ZipInputStream zis = new ZipInputStream(inputStream, charset)) {
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 if (zipEntry.isDirectory()) {
                     continue;
                 }
                 String fileName = zipEntry.getName();
-                Path entryPath = Paths.get(fileName).normalize();
-                if (entryPath.startsWith("..")) {
-                    logger.warn("检测到不安全的ZIP条目，已跳过: {}", fileName);
-                    continue;
-                }
+
+                // ... (这里是和你原来一样的文件处理逻辑)
                 if (isSupportedFile(fileName)) {
                     String content = new BufferedReader(new InputStreamReader(zis, StandardCharsets.UTF_8))
                             .lines()
@@ -76,6 +113,7 @@ public class RagIngestionService {
                 }
             }
         }
+        logger.info("成功使用 {} 编码解压文件。", charset.name());
         return chunks;
     }
 

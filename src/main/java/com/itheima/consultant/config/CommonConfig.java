@@ -105,16 +105,16 @@ public class CommonConfig {
         return redisEmbeddingStore;
     }
 
-    @Bean
-    //构建向量数据检索对象
-    public ContentRetriever contentRetriever() {//有意思，这里EmbeddingStore Store如果使用了默认的embeddingStore 会导致无法读取文件内容
-        return EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(redisEmbeddingStore)
-                .embeddingModel(embeddingModel)
-                .minScore(0.5)
-                .maxResults(3)
-                .build();
-    }
+//    @Bean
+//    //构建向量数据检索对象,这个应该是早期的，后面不在使用这个，而是用4j里面的代替
+//    public ContentRetriever contentRetriever() {//有意思，这里EmbeddingStore Store如果使用了默认的embeddingStore 会导致无法读取文件内容
+//        return EmbeddingStoreContentRetriever.builder()
+//                .embeddingStore(redisEmbeddingStore)
+//                .embeddingModel(embeddingModel)
+//                .minScore(0.5)
+//                .maxResults(3)
+//                .build();
+//    }
 
     @Bean
     //使用API搜索文档
