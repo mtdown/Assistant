@@ -51,11 +51,9 @@
 
 ```bash
 # 克隆项目到本地
-git clone <your-repository-url>
+git clone https://github.com/mtdown/Assistant.git
 cd <your-project-directory>
 在 src/main/resources/application.properties 文件中，配置您的API密钥和Redis连接信息。
-
-Properties
 
 # LangChain4j and OpenAI Configuration
 langchain4j.chat-model.provider=openai
@@ -72,56 +70,10 @@ spring.data.redis.port=6379
 # RAG Data Ingestion Runner (Optional)
 # 启动时是否执行一次性的知识库数据注入
 rag.ingestion.enabled=true
-3. 运行项目
-使用Maven启动Spring Boot应用：
 
-Bash
-
-mvn spring-boot:run
-应用成功启动后，您可以通过API工具（如Postman）与它进行交互。
-
-📖 使用方法
-上传知识文件 (可选)
-
-POST /upload-project
-
-Body: form-data, key=file, value=选择您的.zip文件。
-
-响应: { "sessionId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" }
-
-开始对话
-
-POST /chat
-
-Body: json
-
-JSON
-
-{
-    "message": "请解释一下这个项目中的RagIngestionService是做什么的？",
-    "sessionId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-}
-🗺️ 项目路线图 (Roadmap)
+## 🗺️ 项目路线图 (Roadmap)
 本项目正在积极开发中，后续计划实现以下功能：
-
-[ ] 支持无文件对话: 允许用户在不上传任何文件的情况下直接开始对话。
-
-[ ] 扩展文件支持: 增加对 .pdf, .docx, .md 等更多文件格式的解析能力。
-
-[ ] 实现历史对话记录: 为用户提供一个可以查看和选择历史对话的界面。
-
-🤝 贡献
-欢迎对本项目提出任何建议或贡献！您可以：
-
-Fork 本仓库
-
-创建您的功能分支 (git checkout -b feature/AmazingFeature)
-
-提交您的更改 (git commit -m 'feat: Add some AmazingFeature')
-
-将分支推送到远程 (git push origin feature/AmazingFeature)
-
-创建一个Pull Request
-
-📄 许可证
-本项目采用 MIT 许可证。详情请见 LICENSE 文件。
+1.支持无文件对话: 允许用户在不上传任何文件的情况下直接开始对话。
+2.扩展文件支持: 增加对 .pdf, .docx, .md 等更多文件格式的解析能力。
+3.实现历史对话记录: 为用户提供一个可以查看和选择历史对话的界面。
+4.增加用户账号注册功能
